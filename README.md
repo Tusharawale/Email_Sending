@@ -130,9 +130,10 @@
 
   ```java
   new PasswordAuthentication("tusharawale904904@gmail.com", "Password")
-## 6. **what package we use in this project**
+## 6. **WE use an Email API**
  ```java
- * javax.mail.*;
- * javax.mail.internet.InternetAddress;
- * javax.mail.internet.MimeMessage;
- * java.util.Properties;
+ <dependency>
+          <groupId>com.sun.mail</groupId>
+          <artifactId>javax.mail</artifactId>
+          <version>1.6.2</version>
+      </dependency>
