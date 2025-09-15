@@ -136,13 +136,13 @@
 `https://www.youtube.com/watch?v=l0J-Edn76js&t=2483s`
 
 ## 7. **WE use an Email API**
-```java
+
         <dependencies>
                  <dependency>
                      <groupId>com.sun.mail</groupId>
                      <artifactId>javax.mail</artifactId>
                      <version>1.6.2</version>
                  </dependency>
-       </dependencies>
+       </dependencies>```java
    
 #Day 2 Testing Simple Mail with Attachment
