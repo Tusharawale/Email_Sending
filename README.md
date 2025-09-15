@@ -143,6 +143,6 @@
                      <artifactId>javax.mail</artifactId>
                      <version>1.6.2</version>
                  </dependency>
-       </dependencies>```java
+       </dependencies>
    
 #Day 2 Testing Simple Mail with Attachment
