@@ -129,18 +129,22 @@
 * Your SMTP authentication uses:
 
   ```java
- ` new PasswordAuthentication("tusharawale904904@gmail.com", "Password")`
+  new PasswordAuthentication("tusharawale904904@gmail.com", "Password")
 
 ## 6. **I use this vedio **
 `https://www.youtube.com/watch?v=l0J-Edn76js&t=2483s`
 
 ## 7. **WE use an Email API**
+``java
+  <dependencies>
+    <dependency>
+        <groupId>com.sun.mail</groupId>
+        <artifactId>javax.mail</artifactId>
+        <version>1.6.2</version>
+    </dependency>
+  </dependencies> ``
 
-`<dependency>
-          <groupId>com.sun.mail</groupId>
-          <artifactId>javax.mail</artifactId>
-          <version>1.6.2</version>
-      </dependency>`
+
  
 # Day 2 Testing Simple Mail with Attachment
 
