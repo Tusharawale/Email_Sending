@@ -1,7 +1,7 @@
 # Email_Sending
 # Day 1 Testing Simple Mail Sending
 
-Sure! Let's break down your Java email-sending code step-by-step, covering:
+
 
 * The **packages** you imported
 * The **objects** you created
