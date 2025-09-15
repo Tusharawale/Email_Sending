@@ -130,7 +130,11 @@
 
   ```java
   new PasswordAuthentication("tusharawale904904@gmail.com", "Password")
-## 6. **WE use an Email API**
+
+## 6. **I use this vedio **
+https://www.youtube.com/watch?v=l0J-Edn76js&t=2483s
+
+## 7. **WE use an Email API**
  ```java
  <dependency>
           <groupId>com.sun.mail</groupId>
@@ -138,5 +142,5 @@
           <version>1.6.2</version>
       </dependency>
 
-## 7. **I use this vedio **
-https://www.youtube.com/watch?v=l0J-Edn76js&t=2483s
+
+
