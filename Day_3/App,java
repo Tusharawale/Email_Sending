@@ -1,0 +1,116 @@
+package org.example;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.Multipart;
+
+import java.sql.*;
+import java.util.Properties;
+
+public class App {
+    public static void main(String[] args) {
+        System.out.println("Preparing to send emails to employees...");
+
+        // Database connection info
+        String jdbcURL = "jdbc:mysql://localhost:3306/company"; // change this
+        String dbUser = "root";  // change this
+        String dbPassword =  System.getenv("DB_password");
+        ; // change this
+
+        // Email sender info
+        String fromEmail = "tusharawale904904@gmail.com";
+        String emailPassword = System.getenv("EMAIL_PASSWORD");
+
+        if (emailPassword == null || emailPassword.isEmpty()) {
+            System.err.println("❌ Email password not found. Set 'EMAIL_PASSWORD' environment variable.");
+            return;
+        }
+
+        // Attachment file path (optional)
+        String attachmentPath = "C:/Users/ASUS TUF/Downloads/OPTION-1 (1).pdf"; // or "" for none
+
+        // Connect to DB and fetch employees
+        try (Connection conn = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT employee_id, name, email FROM employees")) {
+
+            while (rs.next()) {
+                int employeeId = rs.getInt("employee_id");
+                String name = rs.getString("name");
+                String toEmail = rs.getString("email");
+
+                // Build personalized message in HTML
+                String message = "<p><strong>Employee ID:</strong> " + employeeId + "</p>" +
+                        "<p><strong>Name:</strong> " + name + "</p>" +
+                        "<p>Welcome to the company! We are excited to have you on board.</p>";
+
+                String subject = "Welcome Employee: ID " + employeeId;
+
+                // Send email
+                sendEmail(message, subject, toEmail, fromEmail, emailPassword, attachmentPath);
+                System.out.println("✅ Email sent to " + name + " (" + toEmail + ")");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("❌ Database error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private static void sendEmail(String message, String subject, String to, String from, String password, String attachmentPath) {
+        final String smtpHost = "smtp.gmail.com";
+        final String smtpPort = "465";
+
+        Properties props = new Properties();
+        props.put("mail.smtp.host", smtpHost);
+        props.put("mail.smtp.port", smtpPort);
+        props.put("mail.smtp.ssl.enable", "true");
+        props.put("mail.smtp.auth", "true");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(from, password);
+            }
+        });
+
+        session.setDebug(true);
+
+        try {
+            MimeMessage mimeMessage = new MimeMessage(session);
+            mimeMessage.setFrom(new InternetAddress(from));
+            mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            mimeMessage.setSubject(subject);
+
+            // Create message part for HTML content
+            MimeBodyPart messageBodyPart = new MimeBodyPart();
+            messageBodyPart.setContent(message, "text/html");
+
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(messageBodyPart);
+
+            // Add attachment if specified
+            if (attachmentPath != null && !attachmentPath.isEmpty()) {
+                MimeBodyPart attachmentPart = new MimeBodyPart();
+                DataSource source = new FileDataSource(attachmentPath);
+                attachmentPart.setDataHandler(new DataHandler(source));
+                attachmentPart.setFileName(source.getName());
+                multipart.addBodyPart(attachmentPart);
+            }
+
+            mimeMessage.setContent(multipart);
+
+            Transport.send(mimeMessage);
+
+        } catch (MessagingException e) {
+            System.err.println("❌ Failed to send email to " + to + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}
